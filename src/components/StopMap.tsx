@@ -8,15 +8,17 @@ interface Props {
   /** Index of the stop to highlight; omit to show the whole route evenly. */
   activeIndex?: number
   height?: number
+  /** Fill the parent instead of using a fixed height (tour screen header). */
+  fill?: boolean
 }
 
 // Leaflet + OpenStreetMap tiles. Only our own data goes on this map.
-export function StopMap({ stops, activeIndex, height = 260 }: Props) {
+export function StopMap({ stops, activeIndex, height = 260, fill = false }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!containerRef.current) return
-    const map = L.map(containerRef.current, { scrollWheelZoom: false })
+    const map = L.map(containerRef.current, { scrollWheelZoom: false, zoomSnap: 0.25, zoomControl: !fill })
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -40,13 +42,15 @@ export function StopMap({ stops, activeIndex, height = 260 }: Props) {
     if (activeIndex !== undefined) {
       map.setView(points[activeIndex], 15)
     } else {
-      map.fitBounds(L.latLngBounds(points), { padding: [24, 24] })
+      // When filling the tour header, leave room for the card that overlaps the bottom.
+      map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [32, 32], paddingBottomRight: [32, fill ? 56 : 32] })
     }
 
     return () => {
       map.remove()
     }
-  }, [stops, activeIndex])
+  }, [stops, activeIndex, fill])
 
+  if (fill) return <div ref={containerRef} className="map map-fill" />
   return <div ref={containerRef} className="map" style={{ height }} />
 }

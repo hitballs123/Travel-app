@@ -14,6 +14,14 @@ export interface Experience {
   stops: Stop[]
   ratingAvg: number
   ratingCount: number
+  /** Shown as €, €€ or €€€. */
+  costLevel: 1 | 2 | 3
+  /** Who the tour works for. accessible = step-free route. */
+  suits: { kids: boolean; adultsOnly: boolean; accessible: boolean }
+  /** Set when the editor picks this tour; note is one or two sentences. */
+  editorsPick?: { note: string }
+  /** Dummy content: the card shows a small "Demo" badge. */
+  demo?: boolean
 }
 
 export interface Stop {

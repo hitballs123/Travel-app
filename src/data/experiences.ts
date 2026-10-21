@@ -1,4 +1,5 @@
 import type { Experience } from '../types'
+import { demoExperiences } from './demoExperiences'
 
 // To add a tour: append an Experience to this array. Nothing else needs to change.
 export const experiences: Experience[] = [
@@ -15,6 +16,11 @@ export const experiences: Experience[] = [
     distanceKm: 1.5,
     ratingAvg: 0,
     ratingCount: 0,
+    costLevel: 2,
+    suits: { kids: false, adultsOnly: true, accessible: false },
+    editorsPick: {
+      note: 'The tour that started this app: five proper beer spots, a brewery by a windmill at the end. Best in October and November, when the boks are on tap.',
+    },
     stops: [
       {
         id: 'in-de-wildeman',
@@ -145,6 +151,7 @@ export const experiences: Experience[] = [
       },
     ],
   },
+  ...demoExperiences,
 ]
 
 export function findExperience(id: string | undefined): Experience | undefined {
